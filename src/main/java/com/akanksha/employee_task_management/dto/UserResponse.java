@@ -6,15 +6,40 @@ public class UserResponse {
     private String name;
     private String email;
     private String role;
+    private Integer teamId;
+    private Integer managerId;
 
     public UserResponse() {
     }
 
-    public UserResponse(Integer id, String name, String email, String role) {
+    // Used by login/auth response
+    public UserResponse(
+            Integer id,
+            String name,
+            String email,
+            String role) {
+
         this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;
+    }
+
+    // Used by Users management
+    public UserResponse(
+            Integer id,
+            String name,
+            String email,
+            String role,
+            Integer teamId,
+            Integer managerId) {
+
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.teamId = teamId;
+        this.managerId = managerId;
     }
 
     public Integer getId() {
@@ -47,5 +72,21 @@ public class UserResponse {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Integer getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
+    }
+
+    public Integer getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
     }
 }

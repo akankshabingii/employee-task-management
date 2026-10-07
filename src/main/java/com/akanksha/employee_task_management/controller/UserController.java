@@ -232,14 +232,14 @@ public class UserController {
     // USER RESPONSE
     // =========================
 
-    private UserResponse convertToUserResponse(
-            User user) {
-
+    private UserResponse convertToUserResponse(User user) {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getRole()
+                user.getRole(),
+                user.getTeam() != null ? user.getTeam().getId() : null,
+                user.getManager() != null ? user.getManager().getId() : null
         );
     }
 

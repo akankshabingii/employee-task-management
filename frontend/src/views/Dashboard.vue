@@ -1,185 +1,22 @@
-```vue
 <template>
-  <aside class="sidebar">
-
-    <div class="brand">
-      <div class="brand-icon">
-        ✓
+  <div class="page">
+    <header class="page-header"><div><div class="eyebrow">Good morning, {{ firstName }}</div><h1 class="page-title">Your workspace</h1><p class="page-subtitle">Here’s a clear view of what’s moving today.</p></div><div class="header-actions"><button class="icon-button">⌁</button><button class="avatar avatar-sm" @click="router.push('/profile')">{{ initial }}</button></div></header>
+    <section class="stat-grid">
+      <div class="stat-card"><div class="stat-top"><span class="stat-label">TOTAL TASKS</span><span class="stat-icon green">✓</span></div><strong class="stat-number">{{ tasks.length }}</strong><div class="stat-foot">All assigned work</div></div>
+      <div class="stat-card"><div class="stat-top"><span class="stat-label">IN PROGRESS</span><span class="stat-icon blue">◷</span></div><strong class="stat-number">{{ inProgress }}</strong><div class="stat-foot"><b>Active</b> right now</div></div>
+      <div class="stat-card"><div class="stat-top"><span class="stat-label">COMPLETED</span><span class="stat-icon yellow">✓</span></div><strong class="stat-number">{{ completed }}</strong><div class="stat-foot">{{ completionRate }}% completion rate</div></div>
+      <div class="stat-card"><div class="stat-top"><span class="stat-label">OVERDUE</span><span class="stat-icon red">!</span></div><strong class="stat-number">{{ overdue }}</strong><div class="stat-foot">Needs your attention</div></div>
+    </section>
+    <section class="dashboard-grid">
+      <div class="card"><div class="card-head"><div><h2 class="section-title">Recent tasks</h2><p class="section-copy">The work closest to you.</p></div><router-link class="text-link" to="/tasks">View all →</router-link></div>
+        <div v-for="task in tasks.slice(0,5)" :key="task.id" class="task-row"><span class="task-dot" :class="{done:task.status==='COMPLETED'}"></span><div class="task-main"><strong>{{ task.title }}</strong><span>{{ task.endDate ? 'Due '+formatDate(task.endDate) : 'No due date' }}</span></div><span class="status-badge" :class="task.status.toLowerCase()">{{ pretty(task.status) }}</span></div>
+        <div v-if="!tasks.length" class="empty"><strong>No tasks yet</strong><span>Your assigned tasks will appear here.</span></div>
       </div>
-
-      <span>TaskFlow</span>
-    </div>
-
-    <nav class="navigation">
-
-      <a href="/dashboard" class="nav-item active">
-        <span class="icon">⌂</span>
-        Dashboard
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="icon">✓</span>
-        Tasks
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="icon">♙</span>
-        Team
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="icon">⚙</span>
-        Settings
-      </a>
-
-    </nav>
-
-    <div class="sidebar-bottom">
-
-      <div class="help-card">
-        <div class="help-icon">?</div>
-
-        <div>
-          <strong>Need help?</strong>
-          <p>Check your workspace</p>
-        </div>
-      </div>
-
-    </div>
-
-  </aside>
+      <div class="card"><div class="card-head"><div><h2 class="section-title">Your progress</h2><p class="section-copy">A small picture of your week.</p></div></div><div class="progress-wrap"><div class="progress-head"><span>Completion</span><b>{{ completionRate }}%</b></div><div class="progress-track"><div class="progress-fill" :style="{width:completionRate+'%'}"></div></div><div class="mini-stats"><div class="mini-stat"><strong>{{ completed }}</strong><span>Completed</span></div><div class="mini-stat"><strong>{{ inProgress }}</strong><span>In progress</span></div></div></div><div class="card-head"><div><h2 class="section-title">Quick actions</h2><p class="section-copy">Jump where you need to go.</p></div></div><div class="quick-list"><router-link class="quick-action" to="/tasks"><div class="quick-icon">✓</div><div class="quick-copy"><strong>Open my tasks</strong><span>Review assignments and progress</span></div><span class="quick-arrow">→</span></router-link><router-link class="quick-action" to="/team"><div class="quick-icon">♧</div><div class="quick-copy"><strong>View team</strong><span>See the people you work with</span></div><span class="quick-arrow">→</span></router-link></div></div>
+    </section>
+  </div>
 </template>
-
-<style scoped>
-
-.sidebar {
-  width: 250px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
-
-  padding: 28px 18px;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-
-  padding: 0 12px;
-  margin-bottom: 45px;
-
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.brand-icon {
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: #18181b;
-  color: white;
-
-  border-radius: 9px;
-
-  font-size: 18px;
-}
-
-.navigation {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-
-  padding: 11px 13px;
-
-  border-radius: 8px;
-
-  color: #71717a;
-
-  font-size: 14px;
-  font-weight: 500;
-
-  transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-  background: #f4f4f5;
-  color: #18181b;
-}
-
-.nav-item.active {
-  background: #f4f4f5;
-  color: #18181b;
-  font-weight: 600;
-}
-
-.icon {
-  width: 20px;
-  text-align: center;
-  font-size: 16px;
-}
-
-.sidebar-bottom {
-  margin-top: auto;
-}
-
-.help-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 13px;
-
-  background: #fafafa;
-  border: 1px solid #eeeeee;
-
-  border-radius: 10px;
-}
-
-.help-icon {
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #18181b;
-  color: white;
-
-  font-size: 13px;
-}
-
-.help-card strong {
-  display: block;
-  font-size: 12px;
-}
-
-.help-card p {
-  margin-top: 2px;
-  color: #a1a1aa;
-  font-size: 10px;
-}
-
-</style>
-```
+<script setup>
+import {ref,computed,onMounted} from 'vue';import {useRouter} from 'vue-router';import api from '../services/api'
+const router=useRouter(),tasks=ref([]),name=localStorage.getItem('userName')||'User';const firstName=computed(()=>name.split(' ')[0]);const initial=computed(()=>name.charAt(0).toUpperCase());const inProgress=computed(()=>tasks.value.filter(t=>t.status==='IN_PROGRESS').length);const completed=computed(()=>tasks.value.filter(t=>t.status==='COMPLETED').length);const overdue=ref(0);const completionRate=computed(()=>tasks.value.length?Math.round(completed.value/tasks.value.length*100):0);const pretty=s=>s?.replaceAll('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase())||'';const formatDate=d=>new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short'});onMounted(async()=>{try{const r=await api.get('/tasks');tasks.value=r.data||[];const today=new Date();today.setHours(0,0,0,0);overdue.value=tasks.value.filter(t=>t.status!=='COMPLETED'&&t.endDate&&new Date(t.endDate)<today).length}catch(e){console.error(e)}})
+</script>

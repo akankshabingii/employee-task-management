@@ -88,8 +88,10 @@ public class SecurityConfig {
                         // LOGIN
                         // =========================
 
-                        .requestMatchers("/auth/login")
+                        .requestMatchers("/auth/login", "/auth/register","/auth/demo")
                         .permitAll()
+
+
 
                         // =========================
                         // USERS

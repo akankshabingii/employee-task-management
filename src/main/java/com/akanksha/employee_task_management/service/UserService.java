@@ -1,5 +1,4 @@
-
-        package com.akanksha.employee_task_management.service;
+package com.akanksha.employee_task_management.service;
 
 import com.akanksha.employee_task_management.dto.LoginRequest;
 import com.akanksha.employee_task_management.dto.UserRequest;
@@ -12,7 +11,7 @@ import com.akanksha.employee_task_management.repository.UserRepository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.akanksha.employee_task_management.dto.RegisterRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,26 +83,73 @@ public class UserService {
 
     public User login(LoginRequest request) {
 
+        System.out.println("Trying login for: [" + request.getEmail() + "]");
+
         User user = userRepository
                 .findByEmail(request.getEmail())
-                .orElseThrow(() ->
-                        new UnauthorizedException(
-                                "Invalid email or password"
-                        )
-                );
+                .orElseThrow(() -> {
+                    System.out.println("No user found with that email");
+                    return new UnauthorizedException("Invalid email or password");
+                });
 
-        if (!passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword())) {
+        System.out.println("Found user, DB hash = [" + user.getPassword() + "]");
+        System.out.println("Password match result = " +
+                passwordEncoder.matches(request.getPassword(), user.getPassword()));
 
-            throw new UnauthorizedException(
-                    "Invalid email or password"
-            );
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new UnauthorizedException("Invalid email or password");
         }
 
         return user;
     }
+// =========================
+// PUBLIC REGISTRATION
+// =========================
 
+    public User registerUser(RegisterRequest request) {
+
+        // Check duplicate email
+        if (userRepository.existsByEmail(request.getEmail())) {
+
+            throw new RuntimeException(
+                    "Email already exists"
+            );
+        }
+
+        // Only MANAGER and EMPLOYEE can self-register
+        String role = request.getRole()
+                .trim()
+                .toUpperCase();
+
+        if (!role.equals("MANAGER")
+                && !role.equals("EMPLOYEE")) {
+
+            throw new IllegalArgumentException(
+                    "You can only register as MANAGER or EMPLOYEE"
+            );
+        }
+
+        User user = new User();
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+
+        // Always hash the password
+        user.setPassword(
+                passwordEncoder.encode(
+                        request.getPassword()
+                )
+        );
+
+        user.setRole(role);
+
+        // Publicly registered users are not assigned
+        // to a team or manager yet.
+        user.setTeam(null);
+        user.setManager(null);
+
+        return userRepository.save(user);
+    }
     // =========================
     // CREATE USER
     // =========================
@@ -472,6 +518,53 @@ public class UserService {
 
         return false;
     }
+
+    public User demoLogin(String requestedRole) {
+
+        String role = requestedRole
+                .trim()
+                .toUpperCase();
+
+        if (!role.equals("ADMIN")
+                && !role.equals("MANAGER")
+                && !role.equals("EMPLOYEE")) {
+
+            throw new IllegalArgumentException(
+                    "Invalid demo role"
+            );
+        }
+
+        String email;
+
+        switch (role) {
+
+            case "ADMIN":
+                email = "newadmin@example.com";
+                break;
+
+            case "MANAGER":
+                email = "newmanager@example.com";
+                break;
+
+            case "EMPLOYEE":
+                email = "newemployee@example.com";
+                break;
+
+            default:
+                throw new IllegalArgumentException(
+                        "Invalid demo role"
+                );
+        }
+
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Demo account is not available"
+                        )
+                );
+    }
+
 
     // =========================
     // CHECK EMPLOYEE ACCESS

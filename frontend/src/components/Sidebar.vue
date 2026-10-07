@@ -1,185 +1,128 @@
-```vue
 <template>
   <aside class="sidebar">
-
-    <div class="brand">
-      <div class="brand-icon">
-        ✓
+    <div class="brand-row">
+      <div class="brand-mark"><span>✓</span></div>
+      <div>
+        <strong>TaskFlow</strong>
+        <small>WORKSPACE</small>
       </div>
-
-      <span>TaskFlow</span>
     </div>
+
+    <div class="workspace-pill">
+      <div class="workspace-dot"></div>
+      <div>
+        <span>Personal workspace</span>
+        <small>Online</small>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+
+    <p class="nav-label">OVERVIEW</p>
 
     <nav class="navigation">
+      <router-link to="/dashboard" class="nav-item">
+        <span class="nav-icon">⌂</span>
+        <span>Dashboard</span>
+      </router-link>
 
-      <a href="/dashboard" class="nav-item active">
-        <span class="icon">⌂</span>
-        Dashboard
-      </a>
+      <router-link to="/tasks" class="nav-item">
+        <span class="nav-icon">✓</span>
+        <span>My tasks</span>
+      </router-link>
 
-      <a href="#" class="nav-item">
-        <span class="icon">✓</span>
-        Tasks
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="icon">♙</span>
-        Team
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="icon">⚙</span>
-        Settings
-      </a>
-
+      <router-link to="/team" class="nav-item">
+        <span class="nav-icon">♧</span>
+        <span>Team</span>
+      </router-link>
     </nav>
 
-    <div class="sidebar-bottom">
+    <!-- ADMIN ONLY -->
+    <template v-if="isAdmin">
+      <p class="nav-label second">ADMINISTRATION</p>
 
-      <div class="help-card">
-        <div class="help-icon">?</div>
+      <nav class="navigation">
+        <router-link to="/users" class="nav-item">
+          <span class="nav-icon">♙</span>
+          <span>Users</span>
+        </router-link>
+      </nav>
+    </template>
 
-        <div>
-          <strong>Need help?</strong>
-          <p>Check your workspace</p>
-        </div>
+    <p class="nav-label second">WORKSPACE</p>
+
+    <nav class="navigation">
+      <router-link to="/settings" class="nav-item">
+        <span class="nav-icon">⚙</span>
+        <span>Settings</span>
+      </router-link>
+
+      <router-link to="/profile" class="nav-item">
+        <span class="nav-icon">◉</span>
+        <span>My profile</span>
+      </router-link>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="help-card">
+      <div class="help-symbol">?</div>
+      <div>
+        <strong>Need a hand?</strong>
+        <span>Everything is under control.</span>
       </div>
-
     </div>
 
+    <div class="sidebar-user">
+      <div class="avatar avatar-sm">{{ initial }}</div>
+
+      <div class="sidebar-user-copy">
+        <strong>{{ userName }}</strong>
+        <span>{{ role }}</span>
+      </div>
+
+      <button
+        class="logout-mini"
+        title="Sign out"
+        @click="logout"
+      >
+        ↪
+      </button>
+    </div>
   </aside>
 </template>
 
-<style scoped>
+<script setup>
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-.sidebar {
-  width: 250px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
+const router = useRouter()
 
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
+const userName = computed(
+  () => localStorage.getItem('userName') || 'User'
+)
 
-  padding: 28px 18px;
+const role = computed(
+  () => localStorage.getItem('role') || 'EMPLOYEE'
+)
 
-  display: flex;
-  flex-direction: column;
+const isAdmin = computed(
+  () => role.value === 'ADMIN'
+)
+
+const initial = computed(
+  () => userName.value.charAt(0).toUpperCase()
+)
+
+function logout() {
+  ;[
+    'token',
+    'role',
+    'userId',
+    'userName',
+    'userEmail',
+    'team'
+  ].forEach(k => localStorage.removeItem(k))
+
+  router.push('/login')
 }
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-
-  padding: 0 12px;
-  margin-bottom: 45px;
-
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.brand-icon {
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: #18181b;
-  color: white;
-
-  border-radius: 9px;
-
-  font-size: 18px;
-}
-
-.navigation {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-
-  padding: 11px 13px;
-
-  border-radius: 8px;
-
-  color: #71717a;
-
-  font-size: 14px;
-  font-weight: 500;
-
-  transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-  background: #f4f4f5;
-  color: #18181b;
-}
-
-.nav-item.active {
-  background: #f4f4f5;
-  color: #18181b;
-  font-weight: 600;
-}
-
-.icon {
-  width: 20px;
-  text-align: center;
-  font-size: 16px;
-}
-
-.sidebar-bottom {
-  margin-top: auto;
-}
-
-.help-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 13px;
-
-  background: #fafafa;
-  border: 1px solid #eeeeee;
-
-  border-radius: 10px;
-}
-
-.help-icon {
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #18181b;
-  color: white;
-
-  font-size: 13px;
-}
-
-.help-card strong {
-  display: block;
-  font-size: 12px;
-}
-
-.help-card p {
-  margin-top: 2px;
-  color: #a1a1aa;
-  font-size: 10px;
-}
-
-</style>
-```
+</script>
