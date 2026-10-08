@@ -1,5 +1,4 @@
-
-        package com.akanksha.employee_task_management.config;
+package com.akanksha.employee_task_management.config;
 
 import com.akanksha.employee_task_management.security.JwtAuthenticationFilter;
 
@@ -15,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
 
 @Configuration
@@ -43,14 +41,8 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        String frontendUrl = System.getenv("FRONTEND_URL");
-
-        if (frontendUrl == null || frontendUrl.isBlank()) {
-            frontendUrl = "http://localhost:5173";
-        }
-
         configuration.setAllowedOrigins(
-                List.of(frontendUrl)
+                List.of("http://localhost:5173")
         );
 
         configuration.setAllowedMethods(
@@ -74,10 +66,6 @@ public class SecurityConfig {
         return source;
     }
 
-    // =========================
-    // SECURITY
-    // =========================
-
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
@@ -97,14 +85,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // =========================
-                        // LOGIN
+                        // LOGIN / SIGNUP
                         // =========================
 
-                        .requestMatchers(
-                                "/auth/login",
-                                "/auth/register",
-                                "/auth/demo"
-                        )
+                        .requestMatchers("/auth/**")
                         .permitAll()
 
                         // =========================
@@ -163,9 +147,7 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-                        .requestMatchers(
-                                "/teams/**"
-                        )
+                        .requestMatchers("/teams/**")
                         .authenticated()
 
                         // =========================
@@ -182,16 +164,13 @@ public class SecurityConfig {
                         // TASKS
                         // =========================
 
-                        .requestMatchers(
-                                "/tasks/**"
-                        )
+                        .requestMatchers("/tasks/**")
                         .authenticated()
 
                         // =========================
                         // EVERYTHING ELSE
                         // =========================
-                        .requestMatchers("/")
-                        .permitAll()
+
                         .anyRequest()
                         .authenticated()
                 )
@@ -204,4 +183,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-

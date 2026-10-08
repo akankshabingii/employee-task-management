@@ -1,17 +1,20 @@
 package com.akanksha.employee_task_management.service;
 
 import com.akanksha.employee_task_management.dto.LoginRequest;
+import com.akanksha.employee_task_management.dto.SignupRequest;
 import com.akanksha.employee_task_management.dto.UserRequest;
 import com.akanksha.employee_task_management.entity.Team;
 import com.akanksha.employee_task_management.entity.User;
+import com.akanksha.employee_task_management.exception.ForbiddenException;
 import com.akanksha.employee_task_management.exception.ResourceNotFoundException;
 import com.akanksha.employee_task_management.exception.UnauthorizedException;
 import com.akanksha.employee_task_management.repository.TeamRepository;
 import com.akanksha.employee_task_management.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.akanksha.employee_task_management.dto.RegisterRequest;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${app.admin-signup-code:}")
+    private String adminSignupCode;
 
     public UserService(
             UserRepository userRepository,
@@ -83,73 +89,80 @@ public class UserService {
 
     public User login(LoginRequest request) {
 
-        System.out.println("Trying login for: [" + request.getEmail() + "]");
-
         User user = userRepository
                 .findByEmail(request.getEmail())
-                .orElseThrow(() -> {
-                    System.out.println("No user found with that email");
-                    return new UnauthorizedException("Invalid email or password");
-                });
+                .orElseThrow(() ->
+                        new UnauthorizedException(
+                                "Invalid email or password"
+                        )
+                );
 
-        System.out.println("Found user, DB hash = [" + user.getPassword() + "]");
-        System.out.println("Password match result = " +
-                passwordEncoder.matches(request.getPassword(), user.getPassword()));
+        if (!passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword())) {
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new UnauthorizedException("Invalid email or password");
+            throw new UnauthorizedException(
+                    "Invalid email or password"
+            );
         }
 
         return user;
     }
-// =========================
-// PUBLIC REGISTRATION
-// =========================
 
-    public User registerUser(RegisterRequest request) {
+    // =========================
+    // PUBLIC SIGNUP
+    // =========================
 
-        // Check duplicate email
-        if (userRepository.existsByEmail(request.getEmail())) {
+    public User signup(SignupRequest request) {
 
-            throw new RuntimeException(
-                    "Email already exists"
-            );
+        String role = request.getRole().trim().toUpperCase();
+
+        if (role.equals("ADMIN")) {
+
+            // Admin signup is only allowed with the secret code
+            // configured in ADMIN_SIGNUP_CODE.
+            if (adminSignupCode == null || adminSignupCode.isBlank()) {
+
+                throw new ForbiddenException(
+                        "Admin signup is disabled"
+                );
+            }
+
+            if (!adminSignupCode.equals(request.getAdminCode())) {
+
+                throw new ForbiddenException(
+                        "Invalid admin signup code"
+                );
+            }
         }
 
-        // Only MANAGER and EMPLOYEE can self-register
-        String role = request.getRole()
-                .trim()
-                .toUpperCase();
+        UserRequest userRequest = new UserRequest();
 
-        if (!role.equals("MANAGER")
-                && !role.equals("EMPLOYEE")) {
+        userRequest.setName(request.getName());
+        userRequest.setEmail(request.getEmail());
+        userRequest.setPassword(request.getPassword());
+        userRequest.setRole(role);
+
+        // Admins don't belong to a team or manager
+        if (!role.equals("ADMIN")) {
+            userRequest.setTeamId(request.getTeamId());
+        }
+
+        if (role.equals("EMPLOYEE")) {
+            userRequest.setManagerId(request.getManagerId());
+        }
+
+        // Manager needs a team so employees can join them
+        if (role.equals("MANAGER") && request.getTeamId() == null) {
 
             throw new IllegalArgumentException(
-                    "You can only register as MANAGER or EMPLOYEE"
+                    "Manager must select a team"
             );
         }
 
-        User user = new User();
-
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-
-        // Always hash the password
-        user.setPassword(
-                passwordEncoder.encode(
-                        request.getPassword()
-                )
-        );
-
-        user.setRole(role);
-
-        // Publicly registered users are not assigned
-        // to a team or manager yet.
-        user.setTeam(null);
-        user.setManager(null);
-
-        return userRepository.save(user);
+        return createUser(userRequest);
     }
+
     // =========================
     // CREATE USER
     // =========================
@@ -518,53 +531,6 @@ public class UserService {
 
         return false;
     }
-
-    public User demoLogin(String requestedRole) {
-
-        String role = requestedRole
-                .trim()
-                .toUpperCase();
-
-        if (!role.equals("ADMIN")
-                && !role.equals("MANAGER")
-                && !role.equals("EMPLOYEE")) {
-
-            throw new IllegalArgumentException(
-                    "Invalid demo role"
-            );
-        }
-
-        String email;
-
-        switch (role) {
-
-            case "ADMIN":
-                email = "newadmin@example.com";
-                break;
-
-            case "MANAGER":
-                email = "newmanager@example.com";
-                break;
-
-            case "EMPLOYEE":
-                email = "newemployee@example.com";
-                break;
-
-            default:
-                throw new IllegalArgumentException(
-                        "Invalid demo role"
-                );
-        }
-
-        return userRepository
-                .findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Demo account is not available"
-                        )
-                );
-    }
-
 
     // =========================
     // CHECK EMPLOYEE ACCESS
