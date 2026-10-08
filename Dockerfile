@@ -1,8 +1,16 @@
+FROM eclipse-temurin:25-jdk AS build
+
+WORKDIR /app
+
+COPY . .
+
+RUN ./mvnw clean package -DskipTests
+
 FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 
-COPY target/employee-task-management-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/employee-task-management-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
