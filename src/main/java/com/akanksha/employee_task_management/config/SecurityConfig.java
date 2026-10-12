@@ -44,7 +44,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:5173",
-                        "https://employee-task-management-frontend.onrender.com"
+                        "https://employee-task-management-kdl4.onrender.com"
                 )
         );
         configuration.setAllowedMethods(
