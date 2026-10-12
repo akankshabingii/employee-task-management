@@ -1,6 +1,5 @@
 <template>
   <div class="users-page">
-
     <!-- Header -->
     <div class="page-header">
       <div>
@@ -19,7 +18,6 @@
 
     <!-- Stats -->
     <div class="stats-grid">
-
       <div class="stat-card">
         <div class="stat-icon">♙</div>
         <div>
@@ -51,20 +49,14 @@
           <strong>{{ employeeCount }}</strong>
         </div>
       </div>
-
     </div>
 
     <!-- Search + Filter -->
     <div class="toolbar">
-
       <div class="search-box">
         <span>⌕</span>
 
-        <input
-          v-model="search"
-          type="text"
-          placeholder="Search users..."
-        />
+        <input v-model="search" type="text" placeholder="Search users..." />
       </div>
 
       <select v-model="roleFilter">
@@ -73,7 +65,6 @@
         <option value="MANAGER">Managers</option>
         <option value="EMPLOYEE">Employees</option>
       </select>
-
     </div>
 
     <!-- Error -->
@@ -82,9 +73,7 @@
     </div>
 
     <!-- Loading -->
-    <div v-if="loading" class="state-box">
-      Loading users...
-    </div>
+    <div v-if="loading" class="state-box">Loading users...</div>
 
     <!-- Empty -->
     <div v-else-if="filteredUsers.length === 0" class="state-box">
@@ -92,16 +81,12 @@
 
       <h3>No users found</h3>
 
-      <p>
-        Try changing your search or role filter.
-      </p>
+      <p>Try changing your search or role filter.</p>
     </div>
 
     <!-- Users Table -->
     <div v-else class="table-card">
-
       <table>
-
         <thead>
           <tr>
             <th>USER</th>
@@ -112,23 +97,15 @@
         </thead>
 
         <tbody>
-
-          <tr
-            v-for="user in filteredUsers"
-            :key="user.id"
-          >
-
+          <tr v-for="user in filteredUsers" :key="user.id">
             <!-- User -->
             <td>
-
               <div class="user-cell">
-
                 <div class="avatar">
                   {{ getInitials(user.name) }}
                 </div>
 
                 <div class="user-info">
-
                   <strong>
                     {{ user.name }}
                   </strong>
@@ -137,95 +114,53 @@
                     {{ user.email }}
                   </span>
 
-                  <small>
-                    ID: {{ user.id }}
-                  </small>
-
+                  <small> ID: {{ user.id }} </small>
                 </div>
-
               </div>
-
             </td>
 
             <!-- Role -->
             <td>
-
-              <span
-                class="role-badge"
-                :class="getRoleClass(user.role)"
-              >
+              <span class="role-badge" :class="getRoleClass(user.role)">
                 {{ user.role }}
               </span>
-
             </td>
 
             <!-- Organization -->
             <td>
-
               <div class="organization">
-
                 <!-- ADMIN -->
                 <template v-if="user.role === 'ADMIN'">
-
-                  <span class="no-org">
-                    —
-                  </span>
-
+                  <span class="no-org"> — </span>
                 </template>
 
                 <!-- MANAGER / EMPLOYEE -->
                 <template v-else>
+                  <div v-if="user.teamId" class="org-line">
+                    <span class="org-label"> Team </span>
 
-                  <div
-                    v-if="user.teamId"
-                    class="org-line"
-                  >
-                    <span class="org-label">
-                      Team
-                    </span>
-
-                    <span class="org-value">
-                      ID: {{ user.teamId }}
-                    </span>
+                    <span class="org-value"> ID: {{ user.teamId }} </span>
                   </div>
 
                   <div
-                    v-if="
-                      user.role === 'EMPLOYEE' &&
-                      user.managerId
-                    "
+                    v-if="user.role === 'EMPLOYEE' && user.managerId"
                     class="org-line"
                   >
-                    <span class="org-label">
-                      Manager
-                    </span>
+                    <span class="org-label"> Manager </span>
 
-                    <span class="org-value">
-                      ID: {{ user.managerId }}
-                    </span>
+                    <span class="org-value"> ID: {{ user.managerId }} </span>
                   </div>
 
-                  <span
-                    v-if="
-                      !user.teamId &&
-                      !user.managerId
-                    "
-                    class="no-org"
-                  >
+                  <span v-if="!user.teamId && !user.managerId" class="no-org">
                     Not assigned
                   </span>
-
                 </template>
-
               </div>
-
             </td>
 
             <!-- Actions -->
             <td>
-
               <div class="actions">
-
                 <button
                   class="action-btn edit"
                   title="Edit user"
@@ -241,59 +176,34 @@
                 >
                   ×
                 </button>
-
               </div>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
-
 
     <!-- ADD / EDIT MODAL -->
 
-    <div
-      v-if="showModal"
-      class="modal-overlay"
-      @click.self="closeModal"
-    >
-
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal">
-
         <div class="modal-header">
-
           <div>
-
             <p class="eyebrow">
-              {{ editingUser ? 'EDIT USER' : 'NEW USER' }}
+              {{ editingUser ? "EDIT USER" : "NEW USER" }}
             </p>
 
             <h2>
-              {{ editingUser ? 'Edit user' : 'Add user' }}
+              {{ editingUser ? "Edit user" : "Add user" }}
             </h2>
-
           </div>
 
-          <button
-            class="close-btn"
-            @click="closeModal"
-          >
-            ×
-          </button>
-
+          <button class="close-btn" @click="closeModal">×</button>
         </div>
 
-
         <form @submit.prevent="saveUser">
-
           <!-- Name -->
           <div class="form-group">
-
             <label>Name</label>
 
             <input
@@ -302,13 +212,10 @@
               placeholder="Enter full name"
               required
             />
-
           </div>
-
 
           <!-- Email -->
           <div class="form-group">
-
             <label>Email</label>
 
             <input
@@ -317,13 +224,10 @@
               placeholder="Enter email address"
               required
             />
-
           </div>
-
 
           <!-- Password -->
           <div class="form-group">
-
             <label>Password</label>
 
             <input
@@ -332,40 +236,23 @@
               placeholder="Enter password"
               required
             />
-
           </div>
-
 
           <!-- Role -->
           <div class="form-group">
-
             <label>Role</label>
 
-            <select
-              v-model="form.role"
-              required
-            >
+            <select v-model="form.role" required>
+              <option value="ADMIN">ADMIN</option>
 
-              <option value="ADMIN">
-                ADMIN
-              </option>
+              <option value="MANAGER">MANAGER</option>
 
-              <option value="MANAGER">
-                MANAGER
-              </option>
-
-              <option value="EMPLOYEE">
-                EMPLOYEE
-              </option>
-
+              <option value="EMPLOYEE">EMPLOYEE</option>
             </select>
-
           </div>
-
 
           <!-- Team -->
           <div class="form-group">
-
             <label>Team ID</label>
 
             <input
@@ -374,19 +261,11 @@
               placeholder="Example: 13"
             />
 
-            <small>
-              Required for managers and employees.
-            </small>
-
+            <small> Required for managers and employees. </small>
           </div>
 
-
           <!-- Manager -->
-          <div
-            v-if="form.role === 'EMPLOYEE'"
-            class="form-group"
-          >
-
+          <div v-if="form.role === 'EMPLOYEE'" class="form-group">
             <label>Manager ID</label>
 
             <input
@@ -395,333 +274,227 @@
               placeholder="Example: 17"
             />
 
-            <small>
-              Required for employees.
-            </small>
-
+            <small> Required for employees. </small>
           </div>
 
-
           <!-- Form error -->
-          <div
-            v-if="formError"
-            class="form-error"
-          >
+          <div v-if="formError" class="form-error">
             {{ formError }}
           </div>
 
-
           <!-- Buttons -->
           <div class="modal-actions">
-
-            <button
-              type="button"
-              class="cancel-btn"
-              @click="closeModal"
-            >
+            <button type="button" class="cancel-btn" @click="closeModal">
               Cancel
             </button>
 
-            <button
-              type="submit"
-              class="save-btn"
-              :disabled="saving"
-            >
+            <button type="submit" class="save-btn" :disabled="saving">
               {{
                 saving
-                  ? 'Saving...'
+                  ? "Saving..."
                   : editingUser
-                    ? 'Save changes'
-                    : 'Create user'
+                    ? "Save changes"
+                    : "Create user"
               }}
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </div>
-
   </div>
 </template>
 
-
 <script setup>
+import { computed, onMounted, reactive, ref } from "vue";
 
-import {
-  computed,
-  onMounted,
-  reactive,
-  ref
-} from 'vue'
-
-import api from '../services/api'
-
+import api from "../services/api";
 
 /* -------------------------
    State
 ------------------------- */
 
-const users = ref([])
+const users = ref([]);
 
-const loading = ref(false)
+const loading = ref(false);
 
-const saving = ref(false)
+const saving = ref(false);
 
-const error = ref('')
+const error = ref("");
 
-const formError = ref('')
+const formError = ref("");
 
-const search = ref('')
+const search = ref("");
 
-const roleFilter = ref('ALL')
+const roleFilter = ref("ALL");
 
-const showModal = ref(false)
+const showModal = ref(false);
 
-const editingUser = ref(null)
-
+const editingUser = ref(null);
 
 /* -------------------------
    Form
 ------------------------- */
 
 const form = reactive({
+  name: "",
 
-  name: '',
+  email: "",
 
-  email: '',
+  password: "",
 
-  password: '',
-
-  role: 'EMPLOYEE',
+  role: "EMPLOYEE",
 
   teamId: null,
 
-  managerId: null
-
-})
-
+  managerId: null,
+});
 
 /* -------------------------
    Statistics
 ------------------------- */
 
 const adminCount = computed(() => {
-
-  return users.value.filter(
-    user => user.role === 'ADMIN'
-  ).length
-
-})
-
+  return users.value.filter((user) => user.role === "ADMIN").length;
+});
 
 const managerCount = computed(() => {
-
-  return users.value.filter(
-    user => user.role === 'MANAGER'
-  ).length
-
-})
-
+  return users.value.filter((user) => user.role === "MANAGER").length;
+});
 
 const employeeCount = computed(() => {
-
-  return users.value.filter(
-    user => user.role === 'EMPLOYEE'
-  ).length
-
-})
-
+  return users.value.filter((user) => user.role === "EMPLOYEE").length;
+});
 
 /* -------------------------
    Search / Filter
 ------------------------- */
 
 const filteredUsers = computed(() => {
+  const query = search.value.trim().toLowerCase();
 
-  const query =
-    search.value
-      .trim()
-      .toLowerCase()
-
-
-  return users.value.filter(user => {
-
+  return users.value.filter((user) => {
     const matchesSearch =
       !query ||
-      user.name
-        ?.toLowerCase()
-        .includes(query) ||
-      user.email
-        ?.toLowerCase()
-        .includes(query) ||
-      String(user.id)
-        .includes(query)
-
+      user.name?.toLowerCase().includes(query) ||
+      user.email?.toLowerCase().includes(query) ||
+      String(user.id).includes(query);
 
     const matchesRole =
-      roleFilter.value === 'ALL' ||
-      user.role === roleFilter.value
+      roleFilter.value === "ALL" || user.role === roleFilter.value;
 
-
-    return (
-      matchesSearch &&
-      matchesRole
-    )
-
-  })
-
-})
-
+    return matchesSearch && matchesRole;
+  });
+});
 
 /* -------------------------
    Load users
 ------------------------- */
 
 async function loadUsers() {
+  loading.value = true;
 
-  loading.value = true
-
-  error.value = ''
+  error.value = "";
 
   try {
+    const response = await api.get("/users");
 
-    const response =
-      await api.get('/users')
-
-    users.value =
-      response.data
-
+    users.value = response.data;
   } catch (e) {
-
-    console.error(
-      'Failed to load users:',
-      e
-    )
+    console.error("Failed to load users:", e);
 
     if (e.response?.status === 403) {
-
-      error.value =
-        'You do not have permission to view users.'
-
+      error.value = "You do not have permission to view users.";
     } else {
-
-      error.value =
-        'Failed to load users. Please try again.'
-
+      error.value = "Failed to load users. Please try again.";
     }
-
   } finally {
-
-    loading.value = false
-
+    loading.value = false;
   }
-
 }
-
 
 /* -------------------------
    Reset form
 ------------------------- */
 
 function resetForm() {
+  form.name = "";
 
-  form.name = ''
+  form.email = "";
 
-  form.email = ''
+  form.password = "";
 
-  form.password = ''
+  form.role = "EMPLOYEE";
 
-  form.role = 'EMPLOYEE'
+  form.teamId = null;
 
-  form.teamId = null
+  form.managerId = null;
 
-  form.managerId = null
-
-  formError.value = ''
-
+  formError.value = "";
 }
-
 
 /* -------------------------
    Create user
 ------------------------- */
 
 function openCreateModal() {
+  editingUser.value = null;
 
-  editingUser.value = null
+  resetForm();
 
-  resetForm()
-
-  showModal.value = true
-
+  showModal.value = true;
 }
-
 
 /* -------------------------
    Edit user
 ------------------------- */
 
 function openEditModal(user) {
+  editingUser.value = user;
 
-  editingUser.value = user
+  form.name = user.name;
 
-  form.name = user.name
+  form.email = user.email;
 
-  form.email = user.email
+  form.password = "";
 
-  form.password = ''
+  form.role = user.role;
 
-  form.role = user.role
+  form.teamId = user.teamId ?? null;
 
-  form.teamId =
-    user.teamId ?? null
+  form.managerId = user.managerId ?? null;
 
-  form.managerId =
-    user.managerId ?? null
+  formError.value = "";
 
-  formError.value = ''
-
-  showModal.value = true
-
+  showModal.value = true;
 }
-
 
 /* -------------------------
    Close modal
 ------------------------- */
 
 function closeModal() {
-
   if (saving.value) {
-    return
+    return;
   }
 
-  showModal.value = false
+  showModal.value = false;
 
-  editingUser.value = null
+  editingUser.value = null;
 
-  formError.value = ''
-
+  formError.value = "";
 }
-
 
 /* -------------------------
    Save user
 ------------------------- */
 
 async function saveUser() {
+  saving.value = true;
 
-  saving.value = true
-
-  formError.value = ''
+  formError.value = "";
 
   try {
-
     const payload = {
-
       name: form.name,
 
       email: form.email,
@@ -730,170 +503,104 @@ async function saveUser() {
 
       role: form.role,
 
-      teamId:
-        form.teamId || null,
+      teamId: form.teamId || null,
 
-      managerId:
-        form.role === 'EMPLOYEE'
-          ? form.managerId || null
-          : null
-
-    }
-
+      managerId: form.role === "EMPLOYEE" ? form.managerId || null : null,
+    };
 
     if (editingUser.value) {
-
-      await api.put(
-        `/users/${editingUser.value.id}`,
-        payload
-      )
-
+      await api.put(`/users/${editingUser.value.id}`, payload);
     } else {
-
-      await api.post(
-        '/users',
-        payload
-      )
-
+      await api.post("/users", payload);
     }
 
+    closeModal();
 
-    closeModal()
-
-    await loadUsers()
-
+    await loadUsers();
   } catch (e) {
-
-    console.error(
-      'Failed to save user:',
-      e
-    )
+    console.error("Failed to save user:", e);
 
     formError.value =
       e.response?.data?.message ||
       e.response?.data ||
-      'Unable to save user. Please check the entered details.'
-
+      "Unable to save user. Please check the entered details.";
   } finally {
-
-    saving.value = false
-
+    saving.value = false;
   }
-
 }
-
 
 /* -------------------------
    Delete user
 ------------------------- */
 
 async function deleteUser(user) {
-
-  const confirmed =
-    window.confirm(
-      `Are you sure you want to delete ${user.name}?`
-    )
-
+  const confirmed = window.confirm(
+    `Are you sure you want to delete ${user.name}?`,
+  );
 
   if (!confirmed) {
-    return
+    return;
   }
-
 
   try {
+    await api.delete(`/users/${user.id}`);
 
-    await api.delete(
-      `/users/${user.id}`
-    )
-
-    await loadUsers()
-
+    await loadUsers();
   } catch (e) {
+    console.error("Failed to delete user:", e);
 
-    console.error(
-      'Failed to delete user:',
-      e
-    )
-
-    alert(
-      e.response?.data?.message ||
-      'Unable to delete this user.'
-    )
-
+    alert(e.response?.data?.message || "Unable to delete this user.");
   }
-
 }
-
 
 /* -------------------------
    Helpers
 ------------------------- */
 
 function getInitials(name) {
-
   if (!name) {
-    return '?'
+    return "?";
   }
-
 
   return name
-    .split(' ')
-    .map(part => part.charAt(0))
+    .split(" ")
+    .map((part) => part.charAt(0))
     .slice(0, 2)
-    .join('')
-    .toUpperCase()
-
+    .join("")
+    .toUpperCase();
 }
-
 
 function getRoleClass(role) {
-
   return {
+    admin: role === "ADMIN",
 
-    admin:
-      role === 'ADMIN',
+    manager: role === "MANAGER",
 
-    manager:
-      role === 'MANAGER',
-
-    employee:
-      role === 'EMPLOYEE'
-
-  }
-
+    employee: role === "EMPLOYEE",
+  };
 }
-
 
 /* -------------------------
    Initial load
 ------------------------- */
 
 onMounted(() => {
-
-  loadUsers()
-
-})
-
+  loadUsers();
+});
 </script>
 
-
 <style scoped>
-
 .users-page {
-
   padding: 36px 42px 50px;
 
   min-height: 100vh;
 
   background: #f7f8f6;
-
 }
-
 
 /* Header */
 
 .page-header {
-
   display: flex;
 
   justify-content: space-between;
@@ -901,11 +608,9 @@ onMounted(() => {
   align-items: flex-end;
 
   margin-bottom: 30px;
-
 }
 
 .eyebrow {
-
   margin: 0 0 7px;
 
   font-size: 11px;
@@ -915,11 +620,9 @@ onMounted(() => {
   letter-spacing: 1.8px;
 
   color: #8a918b;
-
 }
 
 h1 {
-
   margin: 0;
 
   font-size: 32px;
@@ -929,21 +632,17 @@ h1 {
   color: #20251f;
 
   letter-spacing: -0.8px;
-
 }
 
 .subtitle {
-
   margin: 9px 0 0;
 
   color: #858b85;
 
   font-size: 14px;
-
 }
 
 .add-btn {
-
   border: none;
 
   background: #263b2c;
@@ -965,39 +664,29 @@ h1 {
   align-items: center;
 
   gap: 8px;
-
 }
 
 .add-btn:hover {
-
   background: #1d3023;
-
 }
 
 .add-btn span {
-
   font-size: 20px;
-
 }
-
 
 /* Stats */
 
 .stats-grid {
-
   display: grid;
 
-  grid-template-columns:
-    repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
   gap: 16px;
 
   margin-bottom: 24px;
-
 }
 
 .stat-card {
-
   background: white;
 
   border: 1px solid #e7ebe6;
@@ -1011,11 +700,9 @@ h1 {
   align-items: center;
 
   gap: 14px;
-
 }
 
 .stat-icon {
-
   width: 42px;
 
   height: 42px;
@@ -1033,11 +720,9 @@ h1 {
   color: #304634;
 
   font-size: 18px;
-
 }
 
 .stat-card span {
-
   display: block;
 
   color: #8a908a;
@@ -1045,22 +730,17 @@ h1 {
   font-size: 12px;
 
   margin-bottom: 4px;
-
 }
 
 .stat-card strong {
-
   color: #20251f;
 
   font-size: 22px;
-
 }
-
 
 /* Toolbar */
 
 .toolbar {
-
   display: flex;
 
   justify-content: space-between;
@@ -1068,11 +748,9 @@ h1 {
   gap: 14px;
 
   margin-bottom: 16px;
-
 }
 
 .search-box {
-
   width: 360px;
 
   height: 43px;
@@ -1090,19 +768,15 @@ h1 {
   padding: 0 13px;
 
   gap: 9px;
-
 }
 
 .search-box span {
-
   color: #929892;
 
   font-size: 20px;
-
 }
 
 .search-box input {
-
   border: none;
 
   outline: none;
@@ -1112,11 +786,9 @@ h1 {
   font-size: 13px;
 
   color: #303630;
-
 }
 
 .toolbar select {
-
   height: 43px;
 
   min-width: 145px;
@@ -1132,14 +804,11 @@ h1 {
   color: #555c55;
 
   outline: none;
-
 }
-
 
 /* Table */
 
 .table-card {
-
   background: white;
 
   border: 1px solid #e5e9e4;
@@ -1147,25 +816,19 @@ h1 {
   border-radius: 15px;
 
   overflow: hidden;
-
 }
 
 table {
-
   width: 100%;
 
   border-collapse: collapse;
-
 }
 
 thead {
-
   background: #fafbf9;
-
 }
 
 th {
-
   text-align: left;
 
   padding: 14px 20px;
@@ -1177,40 +840,31 @@ th {
   color: #939993;
 
   font-weight: 700;
-
 }
 
 td {
-
   padding: 17px 20px;
 
   border-top: 1px solid #edf0ec;
 
   vertical-align: middle;
-
 }
 
 tbody tr:hover {
-
   background: #fcfdfb;
-
 }
-
 
 /* User */
 
 .user-cell {
-
   display: flex;
 
   align-items: center;
 
   gap: 12px;
-
 }
 
 .avatar {
-
   width: 39px;
 
   height: 39px;
@@ -1232,11 +886,9 @@ tbody tr:hover {
   font-weight: 700;
 
   flex-shrink: 0;
-
 }
 
 .user-info strong {
-
   display: block;
 
   color: #252a25;
@@ -1244,21 +896,17 @@ tbody tr:hover {
   font-size: 13px;
 
   margin-bottom: 3px;
-
 }
 
 .user-info span {
-
   display: block;
 
   color: #777e77;
 
   font-size: 12px;
-
 }
 
 .user-info small {
-
   display: block;
 
   color: #a0a6a0;
@@ -1266,14 +914,11 @@ tbody tr:hover {
   font-size: 10px;
 
   margin-top: 3px;
-
 }
-
 
 /* Role */
 
 .role-badge {
-
   display: inline-flex;
 
   align-items: center;
@@ -1286,98 +931,76 @@ tbody tr:hover {
 
   font-weight: 700;
 
-  letter-spacing: .5px;
-
+  letter-spacing: 0.5px;
 }
 
 .role-badge.admin {
-
   background: #eee9f8;
 
   color: #70559a;
-
 }
 
 .role-badge.manager {
-
   background: #e8f0f6;
 
   color: #4f718c;
-
 }
 
 .role-badge.employee {
-
   background: #edf3e9;
 
   color: #56714d;
-
 }
-
 
 /* Organization */
 
 .organization {
-
   display: flex;
 
   flex-direction: column;
 
   gap: 5px;
-
 }
 
 .org-line {
-
   display: flex;
 
   align-items: center;
 
   gap: 9px;
-
 }
 
 .org-label {
-
   min-width: 55px;
 
   color: #969d96;
 
   font-size: 11px;
-
 }
 
 .org-value {
-
   color: #3c463c;
 
   font-size: 12px;
 
   font-weight: 600;
-
 }
 
 .no-org {
-
   color: #a0a6a0;
 
   font-size: 12px;
-
 }
-
 
 /* Actions */
 
 .actions {
-
   display: flex;
 
   gap: 7px;
-
 }
 
 .action-btn {
-
   width: 32px;
 
   height: 32px;
@@ -1391,38 +1014,27 @@ tbody tr:hover {
   cursor: pointer;
 
   font-size: 14px;
-
 }
 
 .action-btn.edit {
-
   color: #516253;
-
 }
 
 .action-btn.edit:hover {
-
   background: #edf2ed;
-
 }
 
 .action-btn.delete {
-
   color: #a36b6b;
-
 }
 
 .action-btn.delete:hover {
-
   background: #f8eeee;
-
 }
-
 
 /* States */
 
 .state-box {
-
   background: white;
 
   border: 1px solid #e5e9e4;
@@ -1434,39 +1046,31 @@ tbody tr:hover {
   text-align: center;
 
   color: #858b85;
-
 }
 
 .empty-icon {
-
   font-size: 30px;
 
   color: #9ba39b;
 
   margin-bottom: 10px;
-
 }
 
 .state-box h3 {
-
   margin: 0 0 5px;
 
   color: #343a34;
 
   font-size: 16px;
-
 }
 
 .state-box p {
-
   margin: 0;
 
   font-size: 13px;
-
 }
 
 .error-box {
-
   background: #fff3f3;
 
   border: 1px solid #f0d8d8;
@@ -1480,14 +1084,11 @@ tbody tr:hover {
   margin-bottom: 16px;
 
   font-size: 13px;
-
 }
-
 
 /* Modal */
 
 .modal-overlay {
-
   position: fixed;
 
   inset: 0;
@@ -1503,11 +1104,9 @@ tbody tr:hover {
   padding: 20px;
 
   z-index: 1000;
-
 }
 
 .modal {
-
   width: 480px;
 
   max-width: 100%;
@@ -1522,13 +1121,10 @@ tbody tr:hover {
 
   padding: 27px;
 
-  box-shadow:
-    0 25px 70px rgba(0, 0, 0, .16);
-
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.16);
 }
 
 .modal-header {
-
   display: flex;
 
   justify-content: space-between;
@@ -1536,21 +1132,17 @@ tbody tr:hover {
   align-items: flex-start;
 
   margin-bottom: 25px;
-
 }
 
 .modal-header h2 {
-
   margin: 0;
 
   font-size: 22px;
 
   color: #242a24;
-
 }
 
 .close-btn {
-
   border: none;
 
   background: #f2f4f1;
@@ -1566,20 +1158,15 @@ tbody tr:hover {
   font-size: 19px;
 
   color: #697069;
-
 }
-
 
 /* Form */
 
 .form-group {
-
   margin-bottom: 17px;
-
 }
 
 .form-group label {
-
   display: block;
 
   margin-bottom: 7px;
@@ -1589,12 +1176,10 @@ tbody tr:hover {
   font-size: 12px;
 
   font-weight: 600;
-
 }
 
 .form-group input,
 .form-group select {
-
   width: 100%;
 
   box-sizing: border-box;
@@ -1614,22 +1199,16 @@ tbody tr:hover {
   color: #343934;
 
   background: white;
-
 }
 
 .form-group input:focus,
 .form-group select:focus {
-
   border-color: #728672;
 
-  box-shadow:
-    0 0 0 3px
-    rgba(114, 134, 114, .09);
-
+  box-shadow: 0 0 0 3px rgba(114, 134, 114, 0.09);
 }
 
 .form-group small {
-
   display: block;
 
   color: #999f99;
@@ -1637,11 +1216,9 @@ tbody tr:hover {
   font-size: 10px;
 
   margin-top: 5px;
-
 }
 
 .form-error {
-
   background: #fff2f2;
 
   color: #a45c5c;
@@ -1655,14 +1232,11 @@ tbody tr:hover {
   font-size: 12px;
 
   margin-bottom: 15px;
-
 }
-
 
 /* Modal buttons */
 
 .modal-actions {
-
   display: flex;
 
   justify-content: flex-end;
@@ -1670,12 +1244,10 @@ tbody tr:hover {
   gap: 9px;
 
   margin-top: 25px;
-
 }
 
 .cancel-btn,
 .save-btn {
-
   height: 40px;
 
   padding: 0 16px;
@@ -1687,105 +1259,73 @@ tbody tr:hover {
   font-weight: 600;
 
   cursor: pointer;
-
 }
 
 .cancel-btn {
-
   background: white;
 
   border: 1px solid #dfe4de;
 
   color: #626a62;
-
 }
 
 .save-btn {
-
   border: none;
 
   background: #263b2c;
 
   color: white;
-
 }
 
 .save-btn:hover {
-
   background: #1d3023;
-
 }
 
 .save-btn:disabled {
-
-  opacity: .6;
+  opacity: 0.6;
 
   cursor: not-allowed;
-
 }
-
 
 /* Responsive */
 
 @media (max-width: 900px) {
-
   .stats-grid {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .users-page {
-
     padding: 25px;
-
   }
 
   .table-card {
-
     overflow-x: auto;
-
   }
 
   table {
-
     min-width: 750px;
-
   }
-
 }
 
 @media (max-width: 600px) {
-
   .page-header {
-
     align-items: flex-start;
 
     flex-direction: column;
 
     gap: 18px;
-
   }
 
   .stats-grid {
-
     grid-template-columns: 1fr;
-
   }
 
   .toolbar {
-
     flex-direction: column;
-
   }
 
   .search-box {
-
     width: auto;
-
   }
-
 }
-
 </style>

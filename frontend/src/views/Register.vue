@@ -2,7 +2,6 @@
 <template>
   <div class="register-page">
     <div class="register-card">
-
       <!-- Brand -->
       <div class="brand">
         <div class="brand-icon">✓</div>
@@ -29,7 +28,6 @@
       </div>
 
       <form @submit.prevent="register">
-
         <!-- Name -->
         <div class="field">
           <label>Full name</label>
@@ -57,16 +55,11 @@
           <label>Account type</label>
 
           <div class="role-options">
-
             <label
               class="role-option"
               :class="{ selected: role === 'EMPLOYEE' }"
             >
-              <input
-                type="radio"
-                value="EMPLOYEE"
-                v-model="role"
-              />
+              <input type="radio" value="EMPLOYEE" v-model="role" />
 
               <div>
                 <strong>Employee</strong>
@@ -78,18 +71,13 @@
               class="role-option"
               :class="{ selected: role === 'MANAGER' }"
             >
-              <input
-                type="radio"
-                value="MANAGER"
-                v-model="role"
-              />
+              <input type="radio" value="MANAGER" v-model="role" />
 
               <div>
                 <strong>Manager</strong>
                 <span>Manage teams and tasks</span>
               </div>
             </label>
-
           </div>
         </div>
 
@@ -116,104 +104,90 @@
         </div>
 
         <!-- Register -->
-        <button
-          type="submit"
-          class="register-button"
-          :disabled="loading"
-        >
-          {{ loading ? 'Creating account...' : 'Create account' }}
+        <button type="submit" class="register-button" :disabled="loading">
+          {{ loading ? "Creating account..." : "Create account" }}
         </button>
-
       </form>
 
       <!-- Login -->
       <div class="login-link">
         Already have an account?
-        <button @click="goToLogin">
-          Sign in
-        </button>
+        <button @click="goToLogin">Sign in</button>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import api from '../services/api'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import api from "../services/api";
 
-const router = useRouter()
+const router = useRouter();
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const role = ref('EMPLOYEE')
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const role = ref("EMPLOYEE");
 
-const loading = ref(false)
-const message = ref('')
-const success = ref(false)
+const loading = ref(false);
+const message = ref("");
+const success = ref(false);
 
 async function register() {
-
-  message.value = ''
-  success.value = false
+  message.value = "";
+  success.value = false;
 
   if (password.value !== confirmPassword.value) {
-    message.value = 'Passwords do not match.'
-    return
+    message.value = "Passwords do not match.";
+    return;
   }
 
   if (password.value.length < 6) {
-    message.value = 'Password must be at least 6 characters.'
-    return
+    message.value = "Password must be at least 6 characters.";
+    return;
   }
 
-  loading.value = true
+  loading.value = true;
 
   try {
-
-    await api.post('/auth/register', {
+    await api.post("/auth/register", {
       name: name.value,
       email: email.value,
       password: password.value,
-      role: role.value
-    })
+      role: role.value,
+    });
 
-    success.value = true
-    message.value = 'Account created successfully! Redirecting to login...'
+    success.value = true;
+    message.value = "Account created successfully! Redirecting to login...";
 
     setTimeout(() => {
-      router.push('/login')
-    }, 1200)
-
+      router.push("/login");
+    }, 1200);
   } catch (e) {
-
     if (e.response?.status === 400) {
       message.value =
         e.response?.data?.message ||
-        'Please check your information and try again.'
+        "Please check your information and try again.";
     } else if (e.response?.status === 409) {
-      message.value = 'An account with this email already exists.'
+      message.value = "An account with this email already exists.";
     } else {
       message.value =
         e.response?.data?.message ||
-        'Unable to create account. Please try again.'
+        "Unable to create account. Please try again.";
     }
-
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 function goToLogin() {
-  router.push('/login')
+  router.push("/login");
 }
 </script>
 
 <style scoped>
-
 * {
   box-sizing: border-box;
 }
@@ -315,7 +289,9 @@ function goToLogin() {
   outline: none;
   background: #fff;
   color: #26352e;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .field input:focus {
@@ -446,7 +422,6 @@ function goToLogin() {
 /* Mobile */
 
 @media (max-width: 500px) {
-
   .register-card {
     padding: 30px 24px;
   }
@@ -459,6 +434,5 @@ function goToLogin() {
     font-size: 24px;
   }
 }
-
 </style>
 ```

@@ -85,49 +85,30 @@
         <span>{{ role }}</span>
       </div>
 
-      <button
-        class="logout-mini"
-        title="Sign out"
-        @click="logout"
-      >
-        ↪
-      </button>
+      <button class="logout-mini" title="Sign out" @click="logout">↪</button>
     </div>
   </aside>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
-const userName = computed(
-  () => localStorage.getItem('userName') || 'User'
-)
+const userName = computed(() => localStorage.getItem("userName") || "User");
 
-const role = computed(
-  () => localStorage.getItem('role') || 'EMPLOYEE'
-)
+const role = computed(() => localStorage.getItem("role") || "EMPLOYEE");
 
-const isAdmin = computed(
-  () => role.value === 'ADMIN'
-)
+const isAdmin = computed(() => role.value === "ADMIN");
 
-const initial = computed(
-  () => userName.value.charAt(0).toUpperCase()
-)
+const initial = computed(() => userName.value.charAt(0).toUpperCase());
 
 function logout() {
-  ;[
-    'token',
-    'role',
-    'userId',
-    'userName',
-    'userEmail',
-    'team'
-  ].forEach(k => localStorage.removeItem(k))
+  ["token", "role", "userId", "userName", "userEmail", "team"].forEach((k) =>
+    localStorage.removeItem(k),
+  );
 
-  router.push('/login')
+  router.push("/login");
 }
 </script>

@@ -1,7 +1,5 @@
-
 <template>
   <div class="page">
-
     <!-- HEADER -->
     <header class="page-header">
       <div>
@@ -14,37 +12,25 @@
         </p>
       </div>
 
-      <button
-        class="secondary-button"
-        @click="router.push('/tasks')"
-      >
+      <button class="secondary-button" @click="router.push('/tasks')">
         ← Back to tasks
       </button>
     </header>
 
-
     <!-- FORM -->
     <div class="form-card">
-
       <form @submit.prevent="createTask">
-
         <!-- TASK DETAILS -->
         <div class="form-section">
-
           <div class="section-heading">
             <h2>Task details</h2>
 
-            <p>
-              Define what needs to be completed.
-            </p>
+            <p>Define what needs to be completed.</p>
           </div>
 
-
           <div class="form-grid">
-
             <!-- TITLE -->
             <div class="form-group full">
-
               <label>Task title</label>
 
               <input
@@ -53,13 +39,10 @@
                 placeholder="e.g. Complete API integration"
                 required
               />
-
             </div>
-
 
             <!-- DESCRIPTION -->
             <div class="form-group full">
-
               <label>Description</label>
 
               <textarea
@@ -67,129 +50,72 @@
                 rows="4"
                 placeholder="Add context, requirements, or notes..."
               ></textarea>
-
             </div>
-
 
             <!-- PRIORITY -->
             <div class="form-group">
-
               <label>Priority</label>
 
-              <select
-                v-model="form.priority"
-                required
-              >
-                <option value="HIGH">
-                  High
-                </option>
+              <select v-model="form.priority" required>
+                <option value="HIGH">High</option>
 
-                <option value="MEDIUM">
-                  Medium
-                </option>
+                <option value="MEDIUM">Medium</option>
 
-                <option value="LOW">
-                  Low
-                </option>
+                <option value="LOW">Low</option>
               </select>
-
             </div>
-
 
             <!-- STATUS -->
             <div class="form-group">
-
               <label>Status</label>
 
-              <select
-                v-model="form.status"
-                required
-              >
-                <option value="PENDING">
-                  Pending
-                </option>
+              <select v-model="form.status" required>
+                <option value="PENDING">Pending</option>
 
-                <option value="IN_PROGRESS">
-                  In progress
-                </option>
+                <option value="IN_PROGRESS">In progress</option>
 
-                <option value="COMPLETED">
-                  Completed
-                </option>
+                <option value="COMPLETED">Completed</option>
               </select>
-
             </div>
-
           </div>
-
         </div>
-
 
         <!-- SCHEDULE -->
         <div class="form-section">
-
           <div class="section-heading">
-
             <h2>Schedule</h2>
 
-            <p>
-              Set when the task should be worked on.
-            </p>
-
+            <p>Set when the task should be worked on.</p>
           </div>
 
-
           <div class="form-grid">
-
             <!-- START DATE -->
             <div class="form-group">
-
               <label>Start date</label>
 
-              <input
-                v-model="form.startDate"
-                type="date"
-              />
-
+              <input v-model="form.startDate" type="date" />
             </div>
-
 
             <!-- END DATE -->
             <div class="form-group">
-
               <label>Due date</label>
 
-              <input
-                v-model="form.endDate"
-                type="date"
-              />
-
+              <input v-model="form.endDate" type="date" />
             </div>
-
           </div>
-
         </div>
-
 
         <!-- ASSIGNMENT -->
         <div class="form-section">
-
           <div class="section-heading">
-
             <h2>Assignment</h2>
 
-            <p>
-              Select the employee responsible for this task.
-            </p>
-
+            <p>Select the employee responsible for this task.</p>
           </div>
 
-
           <div class="form-grid">
-
             <!-- EMPLOYEE -->
             <div class="form-group">
-
               <label>Employee</label>
 
               <select
@@ -197,13 +123,7 @@
                 required
                 @change="handleEmployeeChange"
               >
-
-                <option
-                  value=""
-                  disabled
-                >
-                  Select employee
-                </option>
+                <option value="" disabled>Select employee</option>
 
                 <option
                   v-for="employee in availableEmployees"
@@ -212,23 +132,15 @@
                 >
                   {{ employee.name }}
                 </option>
-
               </select>
 
-
-              <small
-                v-if="!availableEmployees.length"
-                class="form-hint"
-              >
+              <small v-if="!availableEmployees.length" class="form-hint">
                 No employees available for assignment.
               </small>
-
             </div>
-
 
             <!-- MANAGER -->
             <div class="form-group">
-
               <label>Manager</label>
 
               <select
@@ -236,13 +148,7 @@
                 required
                 :disabled="role === 'MANAGER'"
               >
-
-                <option
-                  value=""
-                  disabled
-                >
-                  Select manager
-                </option>
+                <option value="" disabled>Select manager</option>
 
                 <option
                   v-for="manager in availableManagers"
@@ -251,40 +157,24 @@
                 >
                   {{ manager.name }}
                 </option>
-
               </select>
 
-
-              <small
-                v-if="role === 'MANAGER'"
-                class="form-hint"
-              >
+              <small v-if="role === 'MANAGER'" class="form-hint">
                 Tasks created by you are assigned under your account.
               </small>
-
             </div>
-
           </div>
-
         </div>
-
 
         <!-- PROGRESS -->
         <div class="form-section">
-
           <div class="section-heading">
-
             <h2>Progress</h2>
 
-            <p>
-              Set the initial completion percentage.
-            </p>
-
+            <p>Set the initial completion percentage.</p>
           </div>
 
-
           <div class="progress-input">
-
             <input
               v-model.number="form.progress"
               type="range"
@@ -292,27 +182,17 @@
               max="100"
             />
 
-            <span>
-              {{ form.progress }}%
-            </span>
-
+            <span> {{ form.progress }}% </span>
           </div>
-
         </div>
 
-
         <!-- ERROR -->
-        <div
-          v-if="errorMessage"
-          class="form-message error"
-        >
+        <div v-if="errorMessage" class="form-message error">
           {{ errorMessage }}
         </div>
 
-
         <!-- ACTIONS -->
         <div class="form-actions">
-
           <button
             type="button"
             class="secondary-button"
@@ -321,91 +201,59 @@
             Cancel
           </button>
 
-
-          <button
-            type="submit"
-            class="primary-button"
-            :disabled="loading"
-          >
-            {{ loading ? 'Creating…' : 'Create task' }}
+          <button type="submit" class="primary-button" :disabled="loading">
+            {{ loading ? "Creating…" : "Create task" }}
           </button>
-
         </div>
-
       </form>
-
     </div>
-
   </div>
 </template>
 
-
 <script setup>
+import { ref, computed, onMounted } from "vue";
 
-import {
-  ref,
-  computed,
-  onMounted
-} from 'vue'
+import { useRouter } from "vue-router";
 
-import {
-  useRouter
-} from 'vue-router'
+import api from "../services/api";
 
-import api from '../services/api'
-
-
-const router = useRouter()
-
+const router = useRouter();
 
 /*
  * Logged-in user's role.
  */
-const role =
-  localStorage.getItem('role')
+const role = localStorage.getItem("role");
 
+const currentUserId = Number(localStorage.getItem("userId"));
 
-const currentUserId =
-  Number(localStorage.getItem('userId'))
+const loading = ref(false);
 
+const errorMessage = ref("");
 
-const loading =
-  ref(false)
-
-
-const errorMessage =
-  ref('')
-
-
-const users =
-  ref([])
-
+const users = ref([]);
 
 /*
  * Form state.
  */
 const form = ref({
+  title: "",
 
-  title: '',
-
-  priority: 'MEDIUM',
+  priority: "MEDIUM",
 
   progress: 0,
 
-  status: 'PENDING',
+  status: "PENDING",
 
-  description: '',
+  description: "",
 
-  startDate: '',
+  startDate: "",
 
-  endDate: '',
+  endDate: "",
 
-  employeeId: '',
+  employeeId: "",
 
-  managerId: ''
-
-})
-
+  managerId: "",
+});
 
 /*
  * ADMIN:
@@ -414,45 +262,24 @@ const form = ref({
  * MANAGER:
  * only the logged-in manager
  */
-const availableManagers =
-  computed(() => {
+const availableManagers = computed(() => {
+  if (role === "ADMIN") {
+    return users.value.filter((user) => user.role === "MANAGER");
+  }
 
-    if (role === 'ADMIN') {
+  if (role === "MANAGER") {
+    return users.value.filter((user) => Number(user.id) === currentUserId);
+  }
 
-      return users.value.filter(
-        user =>
-          user.role === 'MANAGER'
-      )
-
-    }
-
-    if (role === 'MANAGER') {
-
-      return users.value.filter(
-        user =>
-          Number(user.id) === currentUserId
-      )
-
-    }
-
-    return []
-
-  })
-
+  return [];
+});
 
 /*
  * Employees available for assignment.
  */
-const availableEmployees =
-  computed(() => {
-
-    return users.value.filter(
-      user =>
-        user.role === 'EMPLOYEE'
-    )
-
-  })
-
+const availableEmployees = computed(() => {
+  return users.value.filter((user) => user.role === "EMPLOYEE");
+});
 
 /*
  * ADMIN:
@@ -469,85 +296,53 @@ const availableEmployees =
  * gives only that manager's employees.
  */
 async function loadUsers() {
-
   try {
+    if (role === "ADMIN") {
+      const response = await api.get("/users");
 
-    if (role === 'ADMIN') {
+      users.value = response.data || [];
 
-      const response =
-        await api.get('/users')
-
-      users.value =
-        response.data || []
-
-      return
+      return;
     }
 
-
-    if (role === 'MANAGER') {
-
+    if (role === "MANAGER") {
       /*
        * Get current manager.
        */
-      const managerResponse =
-        await api.get(
-          `/users/${currentUserId}`
-        )
-
+      const managerResponse = await api.get(`/users/${currentUserId}`);
 
       /*
        * Get employees belonging
        * to this manager.
        */
-      const employeesResponse =
-        await api.get(
-          `/users/${currentUserId}/employees`
-        )
-
+      const employeesResponse = await api.get(
+        `/users/${currentUserId}/employees`,
+      );
 
       /*
        * Store manager + employees
        * together so the existing
        * computed properties work.
        */
-      users.value = [
-
-        managerResponse.data,
-
-        ...(employeesResponse.data || [])
-
-      ]
-
+      users.value = [managerResponse.data, ...(employeesResponse.data || [])];
 
       /*
        * Manager automatically
        * becomes task manager.
        */
-      form.value.managerId =
-        currentUserId
+      form.value.managerId = currentUserId;
 
-      return
+      return;
     }
-
-
   } catch (error) {
-
-    console.error(
-      'Failed to load assignment data:',
-      error
-    )
+    console.error("Failed to load assignment data:", error);
 
     errorMessage.value =
       error.response?.status === 403
-
-        ? 'You do not have permission to load assignment data.'
-
-        : 'Unable to load employees. Please try again.'
-
+        ? "You do not have permission to load assignment data."
+        : "Unable to load employees. Please try again.";
   }
-
 }
-
 
 /*
  * ADMIN:
@@ -556,70 +351,42 @@ async function loadUsers() {
  * automatically select their manager.
  */
 function handleEmployeeChange() {
-
-  if (role !== 'ADMIN') {
-    return
+  if (role !== "ADMIN") {
+    return;
   }
 
+  const employee = users.value.find(
+    (user) => Number(user.id) === Number(form.value.employeeId),
+  );
 
-  const employee =
-    users.value.find(
-      user =>
-        Number(user.id) ===
-        Number(form.value.employeeId)
-    )
-
-
-  if (
-    employee &&
-    employee.managerId
-  ) {
-
-    form.value.managerId =
-      employee.managerId
-
+  if (employee && employee.managerId) {
+    form.value.managerId = employee.managerId;
   }
-
 }
-
 
 /*
  * Create task.
  */
 async function createTask() {
-
-  errorMessage.value = ''
-
+  errorMessage.value = "";
 
   if (!form.value.title.trim()) {
+    errorMessage.value = "Task title is required.";
 
-    errorMessage.value =
-      'Task title is required.'
-
-    return
-
+    return;
   }
-
 
   if (!form.value.employeeId) {
+    errorMessage.value = "Please select an employee.";
 
-    errorMessage.value =
-      'Please select an employee.'
-
-    return
-
+    return;
   }
-
 
   if (!form.value.managerId) {
+    errorMessage.value = "Please select a manager.";
 
-    errorMessage.value =
-      'Please select a manager.'
-
-    return
-
+    return;
   }
-
 
   /*
    * Validate dates.
@@ -627,120 +394,70 @@ async function createTask() {
   if (
     form.value.startDate &&
     form.value.endDate &&
-    form.value.endDate <
-    form.value.startDate
+    form.value.endDate < form.value.startDate
   ) {
+    errorMessage.value = "Due date cannot be before the start date.";
 
-    errorMessage.value =
-      'Due date cannot be before the start date.'
-
-    return
-
+    return;
   }
 
-
-  loading.value = true
-
+  loading.value = true;
 
   try {
+    await api.post("/tasks", {
+      title: form.value.title.trim(),
 
-    await api.post(
-      '/tasks',
-      {
+      priority: form.value.priority,
 
-        title:
-          form.value.title.trim(),
+      progress: form.value.progress,
 
-        priority:
-          form.value.priority,
+      status: form.value.status,
 
-        progress:
-          form.value.progress,
+      description: form.value.description.trim() || null,
 
-        status:
-          form.value.status,
+      startDate: form.value.startDate || null,
 
-        description:
-          form.value.description.trim()
-            || null,
+      endDate: form.value.endDate || null,
 
-        startDate:
-          form.value.startDate
-            || null,
+      employeeId: Number(form.value.employeeId),
 
-        endDate:
-          form.value.endDate
-            || null,
-
-        employeeId:
-          Number(
-            form.value.employeeId
-          ),
-
-        managerId:
-          Number(
-            form.value.managerId
-          )
-
-      }
-    )
-
+      managerId: Number(form.value.managerId),
+    });
 
     /*
      * Success → return
      * to task list.
      */
-    router.push('/tasks')
-
-
+    router.push("/tasks");
   } catch (error) {
-
-    console.error(
-      'Task creation failed:',
-      error
-    )
-
+    console.error("Task creation failed:", error);
 
     errorMessage.value =
       error.response?.data?.message ||
-      'Unable to create task. Please try again.'
-
-
+      "Unable to create task. Please try again.";
   } finally {
-
-    loading.value = false
-
+    loading.value = false;
   }
-
 }
 
-
 onMounted(() => {
-
   /*
    * Employees should never
    * create tasks.
    *
    * Backend enforces this too.
    */
-  if (role === 'EMPLOYEE') {
+  if (role === "EMPLOYEE") {
+    router.replace("/tasks");
 
-    router.replace('/tasks')
-
-    return
-
+    return;
   }
 
-
-  loadUsers()
-
-})
-
+  loadUsers();
+});
 </script>
 
-
 <style scoped>
-
 .form-card {
   background: #ffffff;
   border: 1px solid #e8ece8;
@@ -908,7 +625,6 @@ onMounted(() => {
 }
 
 @media (max-width: 700px) {
-
   .form-card {
     padding: 20px;
   }
@@ -934,8 +650,5 @@ onMounted(() => {
   .form-actions button {
     width: 100%;
   }
-
 }
-
 </style>
-
