@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../views/Login.vue'
+import Signup from '../views/Signup.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Tasks from '../views/Tasks.vue'
 import TaskDetails from '../views/TaskDetails.vue'
@@ -8,12 +9,14 @@ import Profile from '../views/Profile.vue'
 import Team from '../views/Team.vue'
 import Settings from '../views/Settings.vue'
 import Users from '../views/Users.vue'
+import Teams from '../views/Teams.vue'
 import NewTask from '../views/NewTask.vue'
 
 const routes = [
   { path: '/', redirect: '/dashboard' },
 
   { path: '/login', name: 'Login', component: Login, meta: { guestOnly: true } },
+  { path: '/signup', name: 'Signup', component: Signup, meta: { guestOnly: true } },
 
   { path: '/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } },
 
@@ -29,7 +32,9 @@ const routes = [
 
   { path: '/settings', name: 'Settings', component: Settings, meta: { requiresAuth: true } },
 
-  { path: '/users', name: 'Users', component: Users, meta: { requiresAuth: true, adminOnly: true } }
+  { path: '/users', name: 'Users', component: Users, meta: { requiresAuth: true, adminOnly: true } },
+
+  { path: '/teams', name: 'Teams', component: Teams, meta: { requiresAuth: true, adminOnly: true } }
 ]
 
 const router = createRouter({

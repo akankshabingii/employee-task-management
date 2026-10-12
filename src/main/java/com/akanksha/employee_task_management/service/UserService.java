@@ -119,16 +119,11 @@ public class UserService {
 
         if (role.equals("ADMIN")) {
 
-            // Admin signup is only allowed with the secret code
-            // configured in ADMIN_SIGNUP_CODE.
-            if (adminSignupCode == null || adminSignupCode.isBlank()) {
-
-                throw new ForbiddenException(
-                        "Admin signup is disabled"
-                );
-            }
-
-            if (!adminSignupCode.equals(request.getAdminCode())) {
+            // If ADMIN_SIGNUP_CODE is set on the server, the code must match.
+            // If it is not set, anyone can sign up as admin (open demo mode).
+            if (adminSignupCode != null
+                    && !adminSignupCode.isBlank()
+                    && !adminSignupCode.equals(request.getAdminCode())) {
 
                 throw new ForbiddenException(
                         "Invalid admin signup code"
@@ -150,14 +145,6 @@ public class UserService {
 
         if (role.equals("EMPLOYEE")) {
             userRequest.setManagerId(request.getManagerId());
-        }
-
-        // Manager needs a team so employees can join them
-        if (role.equals("MANAGER") && request.getTeamId() == null) {
-
-            throw new IllegalArgumentException(
-                    "Manager must select a team"
-            );
         }
 
         return createUser(userRequest);
@@ -252,42 +239,8 @@ public class UserService {
         // =========================
         // EMPLOYEE RULES
         // =========================
-
         if ("EMPLOYEE".equals(role)) {
-
-            if (request.getManagerId() == null) {
-
-                throw new IllegalArgumentException(
-                        "Employee must have a manager"
-                );
-            }
-
-            if (request.getTeamId() == null) {
-
-                throw new IllegalArgumentException(
-                        "Employee must have a team"
-                );
-            }
-
-            if (user.getManager().getTeam() == null) {
-
-                throw new IllegalArgumentException(
-                        "Manager must belong to a team"
-                );
-            }
-
-            if (!user.getTeam()
-                    .getId()
-                    .equals(
-                            user.getManager()
-                                    .getTeam()
-                                    .getId()
-                    )) {
-
-                throw new IllegalArgumentException(
-                        "Employee and manager must belong to the same team"
-                );
-            }
+            validateEmployeeAssignment(user);
         }
 
         return userRepository.save(user);
@@ -425,45 +378,44 @@ public class UserService {
         // =========================
         // EMPLOYEE RULES
         // =========================
-
         if ("EMPLOYEE".equals(role)) {
-
-            if (existingUser.getManager() == null) {
-
-                throw new IllegalArgumentException(
-                        "Employee must have a manager"
-                );
-            }
-
-            if (existingUser.getTeam() == null) {
-
-                throw new IllegalArgumentException(
-                        "Employee must have a team"
-                );
-            }
-
-            if (existingUser.getManager().getTeam() == null) {
-
-                throw new IllegalArgumentException(
-                        "Manager must belong to a team"
-                );
-            }
-
-            if (!existingUser.getTeam()
-                    .getId()
-                    .equals(
-                            existingUser.getManager()
-                                    .getTeam()
-                                    .getId()
-                    )) {
-
-                throw new IllegalArgumentException(
-                        "Employee and manager must belong to the same team"
-                );
-            }
+            validateEmployeeAssignment(existingUser);
         }
 
         return userRepository.save(existingUser);
+    }
+
+    // =========================
+    // EMPLOYEE TEAM / MANAGER CHECK
+    // =========================
+    // An employee may be unassigned (no manager yet). If a manager is
+    // chosen, the manager must belong to a team, and the employee must be
+    // in that same team (it is filled in automatically when left empty).
+    private void validateEmployeeAssignment(User employee) {
+
+        User manager = employee.getManager();
+
+        if (manager == null) {
+            return;
+        }
+
+        if (manager.getTeam() == null) {
+            throw new IllegalArgumentException(
+                    "Manager must belong to a team"
+            );
+        }
+
+        if (employee.getTeam() == null) {
+            employee.setTeam(manager.getTeam());
+            return;
+        }
+
+        if (!employee.getTeam().getId()
+                .equals(manager.getTeam().getId())) {
+            throw new IllegalArgumentException(
+                    "Employee and manager must belong to the same team"
+            );
+        }
     }
 
     // =========================

@@ -45,6 +45,11 @@
           <span class="nav-icon">♙</span>
           <span>Users</span>
         </router-link>
+
+        <router-link to="/teams" class="nav-item">
+          <span class="nav-icon">▦</span>
+          <span>Teams</span>
+        </router-link>
       </nav>
     </template>
 
