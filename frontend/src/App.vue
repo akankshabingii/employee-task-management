@@ -26,14 +26,15 @@ export default {
     Sidebar
   },
 
-  computed: {
-    isAuthPage() {
-      return (
-        this.$route.name === 'Login' ||
-        this.$route.name === 'Register'
-      )
-    }
+
+computed: {
+  isAuthPage() {
+    return ['Login', 'Register', 'Signup'].includes(this.$route.name)
   }
+}
+
+
+
 }
 </script>
 
