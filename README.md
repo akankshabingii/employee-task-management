@@ -21,15 +21,17 @@ A full-stack task management app for teams. Admins manage users and teams, manag
 
 ## Screenshots
 
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\SignIn.png" alt="Sign page" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Login.png" alt="Login page" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Dashboard.png" alt="Dashboard" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\MyTasks.png" alt="MyTasks" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Teams.png" alt="Teams" width="700">
-<img src="C:\Users\Akanksha bingi\OneDriveDesktop\projects\employee-task-management\docss\Users.png" alt="Users" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask1.png" alt="NewTask1" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask2.png" alt="NewTask2" width="700">
-<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask3.png" alt="NewTask3" width="700">
+
+
+<img src="docs/SignIn.png" alt="Sign up page" width="700">
+<img src="docs/Login.png" alt="Login page" width="700">
+<img src="docs/Dashboard.png" alt="Dashboard" width="700">
+<img src="docs/MyTasks.png" alt="My tasks" width="700">
+<img src="docs/Teams.png" alt="Teams" width="700">
+<img src="docs/Users.png" alt="Users" width="700">
+<img src="docs/NewTask1.png" alt="New task form" width="700">
+<img src="docs/NewTask2.png" alt="New task form, continued" width="700">
+<img src="docs/NewTask3.png" alt="New task form, continued" width="700">
 
 
 ## Tech Stack
