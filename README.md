@@ -21,17 +21,15 @@ A full-stack task management app for teams. Admins manage users and teams, manag
 
 ## Screenshots
 
-| Login | Admin Dashboard |
-|-------|-----------------|
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 162230.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 163501.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164828.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164813.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164740.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164728.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164712.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164657.png")
-![]("C:\Users\Akanksha bingi\OneDrive\Pictures\Screenshots\Screenshot 2026-11-12 164644.png")
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\SignIn.png
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Login.png
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Dashboard.png
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\MyTasks.png
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Teams.png
+C:\Users\Akanksha bingi\OneDriveDesktop\projects\employee-task-management\docss\Users.png
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask1.png"
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask2.png"
+C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask3.png"
 
 ## Tech Stack
 
