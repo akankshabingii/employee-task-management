@@ -21,15 +21,16 @@ A full-stack task management app for teams. Admins manage users and teams, manag
 
 ## Screenshots
 
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\SignIn.png
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Login.png
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Dashboard.png
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\MyTasks.png
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Teams.png
-C:\Users\Akanksha bingi\OneDriveDesktop\projects\employee-task-management\docss\Users.png
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask1.png"
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask2.png"
-C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask3.png"
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\SignIn.png" alt="Sign page" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Login.png" alt="Login page" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Dashboard.png" alt="Dashboard" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\MyTasks.png" alt="MyTasks" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\Teams.png" alt="Teams" width="700">
+<img src="C:\Users\Akanksha bingi\OneDriveDesktop\projects\employee-task-management\docss\Users.png" alt="Users" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask1.png" alt="NewTask1" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask2.png" alt="NewTask2" width="700">
+<img src="C:\Users\Akanksha bingi\OneDrive\Desktop\projects\employee-task-management\docss\NewTask3.png" alt="NewTask3" width="700">
+
 
 ## Tech Stack
 
